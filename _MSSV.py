@@ -132,6 +132,10 @@ def evaluate(state, player):
     global_board_score = evaluate_global_board(state.global_cells.reshape(3, 3), player, state)
     score += global_board_score
 
+    if state.game_over:
+        if global_board_score > 0:
+            score += 10000
+
     return score
 
 def count_score(array, player):
