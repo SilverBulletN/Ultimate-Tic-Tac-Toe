@@ -1,0 +1,2 @@
+model_final vs Random, play 1000 games: Win rate: 0.515
+Random vs model_final, play 1000 games: Win rate: 0.582

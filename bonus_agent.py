@@ -5,12 +5,14 @@ import copy
 import time
 from state import State, UltimateTTT_Move
 # Hyperparameters
-model_path = "model.h5"
+model_path = "model_final.h5"
 
 nn = load_model(model_path)
 def select_move(cur_state: State, remain_time):
     global nn
     valid_moves = cur_state.get_valid_moves
+    if not valid_moves:
+        return None
     valid_moves_idx = valid_moves_to_array(valid_moves)
     valids_mask = np.zeros(81)
     np.put(valids_mask, valid_moves_idx,1)
@@ -24,7 +26,7 @@ def select_move(cur_state: State, remain_time):
 
     policy, value = nn.predict(nn_input)
     policy = policy.reshape(81) * valids_mask
-    policy = policy /(0.01+np.sum(policy))
+    policy = policy /(np.sum(policy))
     action = np.argmax(policy)
     print(f"{action = }, {value = }")
     best_move = to_UTTT_move(action, cur_state.player_to_move)
@@ -34,12 +36,8 @@ def select_move(cur_state: State, remain_time):
 def valid_moves_to_array(valid_moves):
     arr = []
     for move in valid_moves:
-        arr.append(9*move.index_local_board + 3*move.y + move.x)
+        arr.append(9*move.index_local_board + 3*move.x + move.y)
     return np.array(arr, dtype=np.int32)
 
 def to_UTTT_move(action, player_to_move):
-    x = action % 3
-    action = (action - x)//3
-    y = action % 3
-    local_board = (action - y) // 3
-    return UltimateTTT_Move(local_board, x, y, player_to_move)
+    return UltimateTTT_Move(int(action/9), int((action % 9)/3), action % 3, player_to_move)
