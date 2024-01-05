@@ -57,6 +57,4 @@ def main(player_X, player_O, rule = 1):
     print("O:", cur_state.count_O)
 
 
-main('random_agent', '_MSSV',2)
-
- 
+main('random_agent', 'bonus_agent',2)
