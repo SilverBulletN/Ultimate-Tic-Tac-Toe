@@ -2,7 +2,8 @@ from state import State, State_2
 import time
 from importlib import import_module
 
-
+player_1 = 'random_agent'
+player_2 = 'bonus_agent'
 def main(player_X, player_O, rule=2):
     global win, draw, lose
     dict_player = {1: 'X', -1: 'O'}
@@ -70,28 +71,28 @@ def main(player_X, player_O, rule=2):
 win = 0
 draw = 0
 lose = 0
-cnt = 1000
-f = open("performance.txt", "w")
+cnt = 10
+f = open("performance.txt", "a")
 
-print("******model_final go first")
+print(f"******{player_1} go first")
 for i in range(cnt):
     print("Phrase {}:".format(i))
-    main('bonus_agent', 'random_agent', 2)
+    main(player_1, player_2, 2)
 
 print("          | Win | Lose | Draw")
 print("Player 1  | {} | {} | {}".format(win, cnt - win - draw, draw))
 print("Player 2  | {} | {} | {}".format(cnt - win - draw, win, draw))
-f.write("model_final vs Random, play {} games: Win rate: {}\n".format(cnt, win/cnt))
+f.write(f"{player_1} vs {player_2}, play {cnt} games: Win rate: {win/cnt}\n")
 
 win = 0
 draw = 0
 lose = 0
-print("******model_final go second")
+print(f"******{player_1} go second")
 for i in range(cnt):
     print("Phrase {}:".format(i))
-    main('random_agent', 'bonus_agent', 2)
+    main(player_2, player_1, 2)
 
 print("          | Win | Lose | Draw")
 print("Player 1  | {} | {} | {}".format(win, cnt - win - draw, draw))
 print("Player 2  | {} | {} | {}".format(cnt - win - draw, win, draw))
-f.write("model_final vs Random, play {} games: Win rate: {}".format(cnt, (cnt - win - draw)/cnt))
+f.write(f"{player_2} vs {player_1}, play {cnt} games: Win rate: {(cnt - win - draw)/cnt}\n")
