@@ -6,11 +6,12 @@ import time
 from state import State, UltimateTTT_Move
 import math
 import random
+from importlib import import_module
 # Hyperparameters
-model_path = "model_final.h5"
+model_path = "model.h5"
 mcts_search = 50
 MCTS = True
-cpuct = 2
+cpuct = 4
 
 # initializing search tree
 Q = {}  # state-action values
@@ -47,7 +48,7 @@ def select_move(cur_state: State, remain_time):
         policy = policy /(np.sum(policy))
     action = np.argmax(policy)
     # print(f"{action = }, {value = }")
-    best_move = to_UTTT_move(action, cur_state.player_to_move)
+    best_move = to_UTTT_move(action, cur_state)
     
     return best_move if best_move is not None else np.random.choice(cur_state.get_valid_moves)
 
@@ -56,9 +57,6 @@ def valid_moves_to_array(valid_moves):
     for move in valid_moves:
         arr.append(9*move.index_local_board + 3*move.x + move.y)
     return np.array(arr, dtype=np.int32)
-
-def to_UTTT_move(action, player_to_move):
-    return UltimateTTT_Move(int(action/9), int((action % 9)/3), action % 3, player_to_move)
 
 ######################################################
 def bridge(cur_state: State):
@@ -232,6 +230,11 @@ def letter_to_int(letter, player):
         return 1 * player
     elif letter =="O":
         return -1 * player
+    
+def to_UTTT_move(action, cur_state: State):
+    old_agent = import_module('_MSSV')
+    best_move = old_agent.select_move(cur_state, 1000)
+    return random.choices([best_move, UltimateTTT_Move(int(action/9), int((action % 9)/3), action % 3, cur_state.player_to_move)],weights=(0.7, 0.3) ,k=1)[0]
 
 def board_to_array(boardreal, mini_board, player):
     
@@ -375,3 +378,4 @@ def get_action_probs(init_board, current_player, mini_board):
         np.put(action_probs, a, actions_dict[a], mode='raise')
     
     return action_probs
+

@@ -1,3 +1,5 @@
+bonus_agent vs random_agent, play 10 games: Win rate: 0.5 (No MTCS)
+random_agent vs bonus_agent, play 10 games: Win rate: 0.4 (No MTCS)
 bonus_agent vs random_agent, play 1000 games: Win rate: 0.515 (No MTCS)
 random_agent vs bonus_agent, play 1000 games: Win rate: 0.582 (No MTCS)
 random_agent vs bonus_agent, play 10 games: Win rate: 0.6 (MTCS-50)

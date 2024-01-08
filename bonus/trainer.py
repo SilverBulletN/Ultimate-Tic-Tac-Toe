@@ -505,10 +505,7 @@ def pit(nn, new_nn):
             if win:
                 nn_wins +=1
                 break
-
-
             # new nn makes move
-
             policy, v = new_nn.predict(board_to_array(s, mini_board, -1).reshape(1,9,9))
             valids = np.zeros(81)
 
